@@ -25,18 +25,40 @@ print(stringUnica, '\n')
 
 ### PRÉ-PROCESSAMENTO DO TEXTO
 
-from nltk.tokenize import word_tokenize                 ### tokenizar a stringUnica
-from nltk.util import ngrams                            ### tokenizar em 3 grams
+## LOWERCASE TEXT, ONLY
+stringUnica = stringUnica.lower()
+print(stringUnica, '\n')
+
+## TOKENIZATION
+from nltk.tokenize import word_tokenize, RegexpTokenizer                 ### tokenizar a stringUnica, tokenizar por meio de Regular Expression
+from nltk.util import ngrams                                             ### tokenizar em 3 grams
+
 
 tokens = word_tokenize(stringUnica)
-threegrams = list(ngrams(tokens, 3))
 print(' - - TOKENS: ')
 print(tokens, '\n')
+
+threegrams = list(ngrams(tokens, 3))
 print(' - - 3 GRAMS:')
 print(threegrams, '\n')
-
-threegramsUnicas = [' '.join(i) for i in threegrams]            ### junta os 3 grams para ser possível extrair o valor das indenizações
+threegramsUnicas = [' '.join(i) for i in threegrams]                    ### junta os 3 grams para ser possível extrair o valor das indenizações
 print(threegramsUnicas, '\n')
+
+tokenSpace = RegexpTokenizer('\s+', gaps=True)                          ### outra forma de extrair os valores das indenizações mais facilmente
+print(tokenSpace.tokenize((stringUnica)), '\n')
+#tokenSpaceUnica = ' '.join(tokenSpace.tokenize(stringUnica))            ### estou juntando tudo em uma string só para usar o CountVectorizer com tudo minúsculo, poderia fazer isso com as tokenizações threegrams e tokens também
+#print(tokenSpaceUnica)
+
+## REMOVE STOPWORDS
+from nltk.corpus import stopwords
+print(stopwords.words('portuguese'))
+
+stopWords = stopwords.words('portuguese')
+stopLambda = lambda text: [word for word in text if word not in stopWords]         ### Retorna as palavras que não estão na lista de stopwords do português
+tokenSpaceSW = stopLambda(tokenSpace.tokenize(stringUnica))                        ### retiro as stopwords do texto com tokenização por espaço, usado na tokenização com regular expressions
+print(tokenSpaceSW)
+
+
 
 
 
