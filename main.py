@@ -1,6 +1,6 @@
 ## IMPORTAR E EXTRAIR TEXTO DE APENAS 1 PDF
 
-"""import PyPDF2
+import PyPDF2
 
 pdfFileObj = open("pdf1.pdf", 'rb')                     ### rb = read binary mode
 pdfReader = PyPDF2.PdfFileReader(pdfFileObj)            ### ler o pdf
@@ -13,10 +13,21 @@ for i in range(1,pages):
     extractedText = pagesPDF.extractText()              ### extrai o texto em formato de string e armazena na variável
     listaPages.append(extractedText)                    ### coloca em uma lista os textos das páginas
 print(listaPages)
-"""
+
+### SUBSTITUIR SUBSTRINGS \n DA LISTA
+
+import re                                                               ### re = regular expressions
+listPages = [re.sub("\n", '', string) for string in listaPages]         ### para string em listaPages, substituo a substring '\n' por '' em cada item da lista
+print(listPages)
+
+listaPages = ' '.join(listPages)                                        ### junto todos os itens da lista em um item só
+print(listaPages)
 
 
-## IMPORTAR TODOS DOS PDFS DO DIRETÓRIO
+
+
+
+"""## IMPORTAR TODOS DOS PDFS DO DIRETÓRIO
 
 import PyPDF2, os
 
@@ -37,4 +48,4 @@ for file in pdfFiles:
         pageText = pdfReader.getPage(page)
         extractedPageText = pageText.extractText()
         listPages.append(extractedPageText)
-    print(listPages)
+    print(listPages)"""
