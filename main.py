@@ -20,8 +20,28 @@ import re                                                               ### re =
 listPages = [re.sub("\n", '', string) for string in listaPages]         ### para string em listaPages, substituo a substring '\n' por '' em cada item da lista
 print(listPages)
 
-listaPages = ' '.join(listPages)                                        ### junto todos os itens da lista em um item só
-print(listaPages)
+stringUnica = ' '.join(listPages)                                        ### junto todos os itens da lista em uma string só
+print(stringUnica, '\n')
+
+### PRÉ-PROCESSAMENTO DO TEXTO
+
+from nltk.tokenize import word_tokenize                 ### tokenizar a stringUnica
+from nltk.util import ngrams                            ### tokenizar em 3 grams
+
+tokens = word_tokenize(stringUnica)
+threegrams = list(ngrams(tokens, 3))
+print(' - - TOKENS: ')
+print(tokens, '\n')
+print(' - - 3 GRAMS:')
+print(threegrams, '\n')
+
+threegramsUnicas = [' '.join(i) for i in threegrams]            ### junta os 3 grams para ser possível extrair o valor das indenizações
+print(threegramsUnicas, '\n')
+
+
+
+
+
 
 
 
