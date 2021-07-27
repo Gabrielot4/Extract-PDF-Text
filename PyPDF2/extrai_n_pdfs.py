@@ -19,7 +19,7 @@ for file in pdfFiles:
         pageText = pdfReader.getPage(page)
         extractedPageText = pageText.extractText()                                  ### extrai texto da página
         listPages.append(extractedPageText)                                        ### adiciona o texto da página na lista
-    #print(listPages)
+    print(listPages)
 
 ########## SUBSTITUIR AS SUBTRINGS '\n' DA LISTA ##########
 
@@ -31,4 +31,21 @@ for file in pdfFiles:
     print('\033[1;33m - - TEXTO COMO UMA STRING SÓ: \033[m')
     print(stringUnica[:100], '\n')
 
-    
+
+#################### PRÉ-PROCESSAMENTO ####################
+
+## LOWERCASE TEXT
+
+    stringUnica = stringUnica.lower()
+    print('\033[1;33m - - TEXTO COM MINÚSCULAS: \033[m')
+    print(stringUnica[:100], '\n')
+
+## TOKENIZATION
+
+    from nltk.tokenize import word_tokenize, RegexpTokenizer
+
+    space = RegexpTokenizer('\s+', gaps=True)
+    tokenSpace = space.tokenize(stringUnica)
+    print('\033[1;33m - - TOKENIZADO POR ESPAÇO: \033[m')
+    print(tokenSpace, '\n')
+
