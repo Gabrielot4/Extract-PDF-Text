@@ -15,16 +15,16 @@ for file in pdfFiles:
     print(f'\033[1;30;43m Este PDF possui {pages} páginas.\033[m \n ')
 
     listPages = []
-    for page in range(1, pages):                                                    ### itera entre as páginas do PDF
+    for page in range(1, pages):                                                                                        ### itera entre as páginas do PDF
         pageText = pdfReader.getPage(page)
-        extractedPageText = pageText.extractText()                                  ### extrai texto da página
-        listPages.append(extractedPageText)                                        ### adiciona o texto da página na lista
+        extractedPageText = pageText.extractText()                                                                      ### extrai texto da página
+        listPages.append(extractedPageText)                                                                             ### adiciona o texto da página na lista
     print(listPages)
 
 ########## SUBSTITUIR AS SUBTRINGS '\n' DA LISTA ##########
 
     import re
-    listPages = [re.sub("\n", '', string) for string in listPages]                  ### lista com as páginas do PDF
+    listPages = [re.sub("\n", '', string) for string in listPages]                                                      ### lista com as páginas do PDF
     print(listPages[:1], '\n')
 
     stringUnica = ' '.join(listPages)
@@ -48,4 +48,23 @@ for file in pdfFiles:
     tokenSpace = space.tokenize(stringUnica)
     print('\033[1;33m - - TOKENIZADO POR ESPAÇO: \033[m')
     print(tokenSpace, '\n')
+
+## STOPWORDS
+    from nltk.corpus import stopwords
+    #print(stopwords.words('portuguese'))
+
+    stopWords = stopwords.words('portuguese')
+    stopLambda = lambda text: [word for word in text if word not in stopWords]                                          ### Retorna as palavras que não estão na lista de stopwords do português
+    tokenSpaceSW = stopLambda(tokenSpace)                                                                               ### retira as stopwords
+    print('\033[1;33m - - SEM STOPWORDS: \033[m')
+    print(tokenSpaceSW, '\n')
+
+## STEMMING
+    from nltk.stem import SnowballStemmer                                                                               ### O LancasterStemmer é (mais agressivo)
+    stemmer = SnowballStemmer('portuguese')                                                                             ### cria o stemmer com base na língua portuguesa
+
+    stemLambda = lambda text: [stemmer.stem(text) for text in tokenSpaceSW]                                             ### retorna as palavras reduzidas ao seu radical
+    tokenSpaceSWStem = stemLambda(tokenSpaceSW)
+    print('\033[1;33m - - STEMMIZADO: \033[m')
+    print(tokenSpaceSWStem, '\n')
 
