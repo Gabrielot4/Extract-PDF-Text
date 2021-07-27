@@ -8,6 +8,8 @@ for arquivo in os.listdir('.'):
         pdfFiles.append(arquivo)
 print(f'Estes são os PDFs no diretório atual: {pdfFiles} \n')
 
+textFile = open('most_frequent_words.txt', 'w')
+
 for file in pdfFiles:
     pdfFileObj = open(file, 'rb')
     pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
@@ -35,13 +37,11 @@ for file in pdfFiles:
 #################### PRÉ-PROCESSAMENTO ####################
 
 ## LOWERCASE TEXT
-
     stringUnica = stringUnica.lower()
     print('\033[1;33m - - TEXTO COM MINÚSCULAS: \033[m')
     print(stringUnica[:100], '\n')
 
 ## TOKENIZATION
-
     from nltk.tokenize import word_tokenize, RegexpTokenizer
 
     space = RegexpTokenizer('\s+', gaps=True)
@@ -67,4 +67,25 @@ for file in pdfFiles:
     tokenSpaceSWStem = stemLambda(tokenSpaceSW)
     print('\033[1;33m - - STEMMIZADO: \033[m')
     print(tokenSpaceSWStem, '\n')
+
+## MOST FREQUENT WORDS
+    from collections import Counter
+
+    wordCounts = Counter(tokenSpaceSWStem)
+    wordCounts = list(zip(wordCounts.values(), wordCounts.keys()))                     ### (frequência, palavra)
+    wordCounts = sorted(wordCounts, reverse=True)                                      ### ordem decrescente de frequência
+    print('\033[1;33m - - PALAVRAS MAIS FREQUENTES: \033[m')
+    print(wordCounts[:10])
+
+## CRIAR ARQUIVO TXT PARA COLOCAR AS PALAVRAS MAIS FREQUENTES
+
+    textFile = open('most_frequent_words.txt', 'r')
+    cont = textFile.readlines()
+    cont.append(str(wordCounts))
+    cont.append('\n\n')
+    textFile = open('most_frequent_words.txt', 'w')
+    textFile.writelines(cont)
+    textFile.close()
+
+    print('\n')
 
