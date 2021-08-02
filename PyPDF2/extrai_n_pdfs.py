@@ -99,14 +99,26 @@ print('\033[1;34m - - LISTA COM PDFS PRÉ-PROCESSADOS: \033[m')
 print(f'Lista com {len(pdfsList_corpus)} textos pré-processados.', '\n')
 
 ## REALIZAR PROCEDIMENTO DE COSINE SIMILARITY COM TF-IDF (SIMILARIDADE DE TEXTOS)
+# DOCUMENT-TERM MATRIX
 import pandas as pd                                                                                                     ### para ser possível fazer a Document-term matrix
 from sklearn.feature_extraction.text import TfidfVectorizer                                                             ### para fazer a matriz com base no TF-IDF
 
 tfidf = TfidfVectorizer()
-X_tfidf = tfidf.fit_transform(pdfsList_corpus).toarray()                                                                ### vetorizando cada texto em pdfsList, ou seja, cria a Document-term matrix
+X_tfidf = tfidf.fit_transform(pdfsList_corpus).toarray()                                                                ### vetorizan cada texto em pdfsList_corpus para criar a Document-term matrix
 vectorsTFIDF = pd.DataFrame(X_tfidf, columns=tfidf.get_feature_names())
 print('\033[1;33m - - DOCUMENT-TERM MATRIX \033[m')
 print(vectorsTFIDF, '\n')
+
+# PARES DE TEXTOS PARA FAZER COMBINAÇÃO ENTRE TODOS OS PDFS DA LISTA pdfsList_corpus
+from itertools import combinations
+from sklearn.metrics.pairwise import cosine_similarity
+
+pdfsPairs = list(combinations(range(len(pdfsList_corpus)), 2))                                                          ### monta os pares possíveis (0,1), (0,2), (0,3), (1,2) ...
+results = [cosine_similarity([X_tfidf[i]], [X_tfidf[j]]) for (i, j) in pdfsPairs]                                       ### aplica COSINE SIMILARITY em todos os pares possíveis calculados acima
+resultsSorted = sorted(results, reverse=True)
+print('\033[1;33m - - SIMILARIDADE ENTRE TEXTOS DOS PDFS \033[m')
+print(resultsSorted, '\n')
+
 
 
 
